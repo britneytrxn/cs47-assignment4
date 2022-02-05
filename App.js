@@ -6,7 +6,7 @@ import { REDIRECT_URI, SCOPES, CLIENT_ID, ALBUM_ID } from "./utils/constants";
 import  colors  from './Themes/colors';
 import  images  from './Themes/images';
 import   Song   from './Components/song';
-//import millisToMinutesAndSeconds from './utils/millisToMinutesAndSeconds';
+import millisToMinuteSeconds from './utils/millisToMinuteSeconds';
 
 // Endpoints for authorizing with Spotify
 const discovery = {
@@ -48,23 +48,23 @@ export default function App() {
     }
   }, [token]);
 
-  const renderItem = (item) => {
-  // let imageUrl = "";
-  // if (item.album.images === undefined) {
-  //   imageUrl='https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/514dc845-04f5-4538-8a4f-869b64243265/1-2.jpg';
-  // } else {
-  //   imageUrl=item.album.images[0].url
-  // }
+  const renderItem = ({item}) => {
+  let imageUrl = "";
+  if (item.album.images === undefined) {
+    imageUrl='https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/514dc845-04f5-4538-8a4f-869b64243265/1-2.jpg';
+  } else {
+    imageUrl=item.album.images[0].url
+  }
   console.log(item)
     return(
     <Song
     id={item.id}
-    //index={index}
-    //imageURL={imageUrl}
+    index={item.track_number}
+    imageURL={imageUrl}
     title={item.name}
     artist={item.artists[0].name}
     album_name={item.album.name}
-    duration={item.duration_ms} />
+    duration={millisToMinuteSeconds(item.duration_ms)} />
   );
   }
 
@@ -74,11 +74,18 @@ export default function App() {
   
   if (token) {
     contentDisplayed = (
+     <View style={styles.container}>
+       <View style={styles.top}>
+          <Image style={styles.logo_top} source={images.spotify} />
+          <Text style={styles.justice}> Justice
+          </Text>
+       </View>
      <FlatList
        data={tracks}
        renderItem={(item) => renderItem(item)}
        keyExtractor={(item) => item.id}
      />
+     </View>
     );
   } else {
     contentDisplayed = (
@@ -104,6 +111,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1
+  },
+  
+  top: {
+    flexDirection:'row',
+  },
+
+  logo_top: {
+    height: 30,
+    width: 30,
+    top: 15,
+    left:15,
+  },
+
+  justice: {
+    fontSize: 20, 
+    fontWeight: 'bold',
+    margin: 20, 
+    color: "white",
   },
 
   connect_button: {
