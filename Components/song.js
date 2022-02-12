@@ -4,28 +4,31 @@ import {
   Text,
   View,
   Image,
-  ScrollView
+  Pressable,
 } from 'react-native';
 import colors from '../Themes/colors';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Song({ id, index, imageURL, title, artist, album_name, duration }) {
+export default function Song({ id, index, imageURL, title, artist, album_name, duration, preview, external, navigation}) {
+
     return (
         <View style={styles.container}>
-            {/* <ScrollView style={styles.scrollView}> */}
-            <Text style={styles.index}> {index}
-            </Text>
+            <Pressable onPress={() => (navigation.navigate("Preview", {webview_url: preview}))}>
+                <Ionicons name="caret-forward-circle-outline" size={32} color="green"/>
+            </Pressable>
             <Image style={styles.imageURL} source={{uri:imageURL,}}/>
             <View style={styles.title_artist}>
-                <Text style={styles.title} numberOfLines={1}> {title} 
-                </Text>
-                <Text style={styles.artist} numberOfLines={1}> {artist}
-                </Text>
+                <Pressable onPress={() => (navigation.navigate("Details", {webview_url: external}))}>
+                    <Text style={styles.title} numberOfLines={1}> {title} 
+                    </Text>
+                    <Text style={styles.artist} numberOfLines={1}> {artist}
+                    </Text>
+                </Pressable>
             </View>
             <Text style={styles.album_name}> {album_name}
             </Text>
             <Text style={styles.duration}> {duration}
             </Text>
-            {/* </ScrollView> */}
         </View>
     );
 }
